@@ -3,9 +3,12 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// === Middleware Imports === //
+import logger from './src/middleware/logger.js';
+
 // === Server Setup ===
 const app = express();
-const PORT = 5000;
+const PORT =  process.env.PORT || 5000;
 
 // === Path Setup ===
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(express.static(PUBLIC_DIR));
+app.use(logger);
 
 // === Front-end View Handler ===
 const sendView = (res, file) => {
@@ -32,6 +36,10 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
     sendView(res, 'login.html');
+});
+
+app.get('/create', (req, res) => {
+    sendView(res, 'createAccount.html');
 });
 
 // === Server Start === 

@@ -11,3 +11,16 @@ loginBtn.onclick = async (e) => {
         console.error("Fetch Failed : ", error);
     }
 }
+
+const redirectToCreateAccount = (e) => {
+    e.preventDefault();
+
+    try {
+        window.location.href = '/create';
+    } catch (error) {
+        console.error("Fetch Failed : ", error);
+    }
+}
+
+getStartedBtn.onclick = redirectToCreateAccount;
+tryNowBtn.onclick = redirectToCreateAccount;
