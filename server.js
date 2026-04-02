@@ -4,7 +4,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // === Middleware Imports === //
-import logger from './src/middleware/logger.js';
+import logger from './src/middleware/debug/logger.js';
+import session from './src/config/session.js';
+import checkAuthenticated from './src/middleware/session/checkSession.js';
+import requireAuth from './src/middleware/session/sessionAuth.js';
+
+// === Routes Imports ===
+import authRoutes from './src/routes/auth.js';
 
 // === Server Setup ===
 const app = express();
@@ -22,6 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(express.static(PUBLIC_DIR));
 app.use(logger);
+app.use(session);
 
 // === Front-end View Handler ===
 const sendView = (res, file) => {
@@ -30,16 +37,22 @@ const sendView = (res, file) => {
 
 // === Routes ===
 
-app.get('/', (req, res) => {
+app.get('/', checkAuthenticated, (req, res) => {
     sendView(res, 'index.html');
 });
 
-app.get('/login', (req, res) => {
+app.get('/login', checkAuthenticated, (req, res) => {
     sendView(res, 'login.html');
 });
 
-app.get('/create', (req, res) => {
+app.get('/create', checkAuthenticated, (req, res) => {
     sendView(res, 'createAccount.html');
+});
+
+app.use('/api/auth', authRoutes);
+
+app.get('/dashboard', requireAuth, (req, res) => {
+    sendView(res, 'dashboard.html');
 });
 
 // === Server Start === 
