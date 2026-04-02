@@ -55,6 +55,20 @@ app.get('/dashboard', requireAuth, (req, res) => {
     sendView(res, 'dashboard.html');
 });
 
+// === Error Handling ===
+app.use((req, res, next) => {
+    res.status(404).sendFile(path.join(VIEWS_DIR, 'notFound.html'));
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error"
+  });
+});
+
 // === Server Start === 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

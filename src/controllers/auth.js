@@ -1,6 +1,7 @@
 // === Imports ===
 import { checkUser, checkUserWithUsername, createUser } from "../model/userModel.js";
 import bcrypt from 'bcrypt';
+import AppError from "../errors/appError.js";
 
 // === Session ID Controller for Authorized Users === 
 const regenerateSessionId = (req, res, next, user, redirectPage) => {
@@ -26,7 +27,7 @@ const createAccount = async (req, res, next) => {
         const existingUser = await checkUser(username, email);
 
         if (existingUser) {
-            return res.status(400).json({ message: "Username or email already in use" });
+            throw new AppError("User with the same email or username already exists", 400);
         };
 
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -34,8 +35,7 @@ const createAccount = async (req, res, next) => {
 
         regenerateSessionId(req, res, next, createdUserData, "/dashboard");
     } catch (err) {
-        console.error("Error creating account:", err);
-        return res.status(500).json({ message: "Internal server error" });
+        next(err);
     }
 };
 
@@ -47,14 +47,12 @@ const loginAuthentication = async (req, res, next) => {
         const isPasswordValid = await bcrypt.compare(password, user.password_hash);
 
         if (!user || !isPasswordValid) {
-            console.log("Invalid Credentials");
-            return res.status(400).json({ message: "Invalid Credentials" });
+            throw new AppError("Invalid Credentials", 401);
         }
 
         regenerateSessionId(req, res, next, user, "/dashboard");
     } catch (err) {
-        console.error("Error during login:", err);
-        return res.status(500).json({ message: "Internal server error" });
+        next(err);
     }
 }
 
