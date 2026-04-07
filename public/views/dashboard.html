@@ -4,8 +4,59 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
+        <link rel="stylesheet" href="../css/style.css">
     </head>
-    <body>
-        
+    <body class="flex lg:flex-row flex-col p-3 md:p-0">
+        <section>
+            <div class="hidden lg:block lg:w-64 lg:h-screen py-2 border-r-1 border-gray-200 ">
+                <div class="flex items-center justify-center border-b-1 border-gray-200 py-2">
+                    <a href=""><img src="../properties/images/zahev_logo_1.png" class="h-21 hover:cursor-pointer"></a>
+                </div>
+                <div class="py-2 px-3">
+                    <button class="sidebar-button w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-200 hover:text-gray-900 my-2" onclick="show('main', this)">
+                        <span class="text-2xl"></span>
+                        <p class="text-xl font-medium">Dashboard</p>
+                    </button>
+
+                    <button class="sidebar-button w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-200 hover:text-gray-900 my-2" onclick="show('transaction', this)">
+                        <span class="text-2xl"></span>
+                        <p class="text-xl font-medium">Transactions</p>
+                    </button>
+                </div>
+            </div>
+            <div class="lg:hidden">
+                <button class="w-10 h-10 text-2xl rounded-xl border-1 border-gray-300 hover:bg-gray-200 hover:rounded-xl mb-2">
+                    ☰
+                </button>
+            </div>
+        </section>
+        <section class="panel px-5 py-5" id="panel-main">
+            <div class="mb-5">
+                <h1 class="text-3xl font-medium text-slate-900">
+                    Dashboard
+                </h1>
+                <p class="text-sm text-gray-400">
+                    Manage your balance and track spending
+                </p>
+            </div>
+            <div class="w-full h-34 border-1 border-gray-300 rounded-lg shadow-md pt-4 px-5 pb-8 flex flex-col justify-between mb-6">
+                <div class="flex items-center justify-between ">
+                    <p class="text-sm text-gray-400">Current Balance</p>
+                    <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200"><p class="text-lg">$</p></div>
+                </div>
+                <h1 class="text-4xl">Rp. 1,500,000</h1>
+            </div>
+            <div class="w-full h-34 border-1 border-gray-300 rounded-lg shadow-md pt-4 px-5 pb-8 flex flex-col justify-between">
+                <div class="flex items-center justify-between ">
+                    <p class="text-sm text-gray-400">Total Spent</p>
+                    <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200"><p class="text-lg">$</p></div>
+                </div>
+                <h1 class="text-4xl">Rp. 1,500,000</h1>
+            </div>
+        </section>
+        <section class="panel hidden" id="panel-transaction">
+            <h1>THIS IS THE TRANSACTION PANEL</h1>
+        </section>
+        <script src="../js/dashboard.js" defer></script>
     </body>
 </html>
