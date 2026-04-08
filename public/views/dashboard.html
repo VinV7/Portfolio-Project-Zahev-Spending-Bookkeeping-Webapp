@@ -24,39 +24,104 @@
                     </button>
                 </div>
             </div>
-            <div class="lg:hidden">
-                <button class="w-10 h-10 text-2xl rounded-xl border-1 border-gray-300 hover:bg-gray-200 hover:rounded-xl mb-2">
+            <div class="lg:hidden py-2 px-2">
+                <button class="w-10 h-10 text-2xl rounded-xl border-1 border-gray-300 hover:bg-gray-200 hover:rounded-xl ">
                     ☰
                 </button>
             </div>
         </section>
-        <section class="panel px-5 py-5" id="panel-main">
-            <div class="mb-5">
-                <h1 class="text-3xl font-medium text-slate-900">
+
+        <section class="panel px-5 py-5 md:px-10 md:py-8 lg:px-16 lg:py-10 w-screen" id="panel-main">  
+            <div class="mb-5 md:mb-8">
+                <h1 class="text-3xl md:text-4xl font-medium text-slate-900">
                     Dashboard
                 </h1>
                 <p class="text-sm text-gray-400">
                     Manage your balance and track spending
                 </p>
             </div>
-            <div class="w-full h-34 border-1 border-gray-300 rounded-lg shadow-md pt-4 px-5 pb-8 flex flex-col justify-between mb-6">
-                <div class="flex items-center justify-between ">
-                    <p class="text-sm text-gray-400">Current Balance</p>
-                    <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200"><p class="text-lg">$</p></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="w-full h-34 border border-gray-300 rounded-lg shadow-md pt-4 px-5 pb-8 flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-gray-400">Current Balance</p>
+                        <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200">
+                            <p class="text-lg">$</p>
+                        </div>
+                    </div>
+                    <h1 class="text-4xl">Rp. 1,500,000</h1>
                 </div>
-                <h1 class="text-4xl">Rp. 1,500,000</h1>
+
+                <div class="w-full h-34 border border-gray-300 rounded-lg shadow-md pt-4 px-5 pb-8 flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-gray-400">Total Spent</p>
+                        <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200">
+                            <p class="text-lg">&#x21f2;</p>
+                        </div>
+                    </div>
+                    <h1 class="text-4xl ">Rp. 750,000</h1>
+                </div>
             </div>
-            <div class="w-full h-34 border-1 border-gray-300 rounded-lg shadow-md pt-4 px-5 pb-8 flex flex-col justify-between">
-                <div class="flex items-center justify-between ">
-                    <p class="text-sm text-gray-400">Total Spent</p>
-                    <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200"><p class="text-lg">$</p></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="w-full border border-gray-300 rounded-lg shadow-md pt-4 px-5 pb-6 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-400">Add Spending</p>
+                        <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200">
+                            <p class="text-lg">&#9998;</p>
+                        </div>
+                    </div>
+                    <form id="addSpendingForm" class="flex flex-col gap-2">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">Amount</p>
+                            <input type="text" placeholder="Rp. 10,000" id="amountSpentInput"
+                                class="w-full h-9 pl-2 rounded-md border border-gray-400 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">Description</p>
+                            <input type="text" placeholder="e.g Spent 10,000 on lunch" id="descriptionInput"
+                                class="w-full h-9 pl-2 rounded-md border border-gray-400 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                        </div>
+                        <button type="submit"
+                            class="w-full h-9 bg-gray-900 text-neutral-50 text-center text-sm font-medium rounded-lg mt-2 cursor-pointer hover:bg-gray-700 transition-colors">
+                            &#x2b; Add Spending
+                        </button>
+                    </form>
                 </div>
-                <h1 class="text-4xl">Rp. 1,500,000</h1>
+
+                <div class="w-full border border-gray-300 rounded-lg shadow-md pt-4 px-5 pb-6 flex flex-col justify-between lg:justify-start">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-400">Edit your Balance</p>
+                        <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200">
+                            <p class="text-lg">&#9998;</p>
+                        </div>
+                    </div>
+                    <form id="updateBalanceForm" class="flex flex-col gap-2">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">Amount</p>
+                            <input type="text" placeholder="Rp. 10,000" id="balanceInput"
+                                class="w-full h-9 pl-2 rounded-md border border-gray-400 mt-1 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                        </div>
+                        <button type="submit"
+                            class="w-full h-9 bg-gray-900 text-neutral-50 text-center text-sm font-medium rounded-lg mt-2 cursor-pointer hover:bg-gray-700 transition-colors">
+                            &#x2b; Update Balance
+                        </button>
+                    </form>
+                </div>
             </div>
         </section>
-        <section class="panel hidden" id="panel-transaction">
-            <h1>THIS IS THE TRANSACTION PANEL</h1>
+
+        <section class="panel hidden px-5 py-5 md:px-10 md:py-8 lg:px-16 lg:py-10 w-screen" id="panel-transaction">
+            <div class="mb-5 md:mb-8">
+                <h1 class="text-3xl md:text-4xl font-medium text-slate-900 mb-2">
+                    Spending Records
+                </h1>
+                <p class="text-sm text-gray-400">
+                    View and manage all your spending history
+                </p>
+            </div>
         </section>
+
         <script src="../js/dashboard.js" defer></script>
     </body>
 </html>
