@@ -1,3 +1,85 @@
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const res = await fetch("http://localhost:7000/api/getDashboardValues", {
+            credentials: "include",
+        });
+        
+        const data = await res.json();
+
+        document.getElementById('balanceAmount').textContent = data.balance ?? 0;
+        document.getElementById('spentAmount').textContent = data.spending ?? 0;
+    } catch (err) {
+        console.error("Fetch Failed : ", err);
+    }
+
+    const updateBalForm = document.getElementById("updateBalanceForm");
+
+    updateBalForm.onsubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const newBalance = document.getElementById("balanceInput").value;
+            
+            if (!Number.isInteger(Number(newBalance))) {
+                document.getElementById("editBalsError").textContent = "Please enter a valid number.";
+                return;
+            } document.getElementById("editBalsError").textContent = "";
+
+            await fetch("http://localhost:7000/api/updateBalance", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    newBalance: newBalance,
+                })
+            });
+
+            document.getElementById('balanceAmount').textContent = newBalance;
+            document.getElementById("balanceInput").value = "";
+        } catch (err) {
+            console.error("Fetch Failed : ", err);
+        }
+    };
+    
+    const addSpendingForm = document.getElementById("addSpendingForm");
+
+    addSpendingForm.onsubmit = async (e) => {
+        e.preventDefault();
+
+        try  {
+            const spendAmount = document.getElementById("amountSpentInput").value;
+            const spendingDescription = document.getElementById("descriptionInput").value;
+
+            if (!Number.isInteger(Number(spendAmount))) {
+                document.getElementById("addSpendingError").textContent = "Please enter a valid number.";
+                return;
+            } document.getElementById("addSpendingError").textContent = "";
+
+            const res = await fetch ("http://localhost:7000/api/addSpending", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                }, 
+                body: JSON.stringify({
+                    amount: spendAmount,
+                    description: spendingDescription,
+                })
+            })
+
+            const receivedResponse = await res.json();
+
+            document.getElementById("balanceAmount").textContent = receivedResponse.newBalance;
+            document.getElementById("spentAmount").textContent = receivedResponse.newTotalSpent;
+        
+        } catch (err) {
+            console.error("Fetch Failed : ", err);
+        }
+    };
+});
+
 const show = (id, btn) => {
     document.querySelectorAll('.panel').forEach(panel => panel.classList.add('hidden'))
 

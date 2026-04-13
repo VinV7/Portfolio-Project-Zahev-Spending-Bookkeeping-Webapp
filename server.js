@@ -8,9 +8,11 @@ import logger from './src/middleware/debug/logger.js';
 import session from './src/config/session.js';
 import checkAuthenticated from './src/middleware/session/checkSession.js';
 import requireAuth from './src/middleware/session/sessionAuth.js';
+import cookieParser from 'cookie-parser';
 
 // === Routes Imports ===
 import authRoutes from './src/routes/auth.js';
+import dashboardRoutes from './src/routes/dashboard.js';
 
 // === Server Setup ===
 const app = express();
@@ -23,6 +25,7 @@ const PUBLIC_DIR = path.join(__dirname, "public");
 const VIEWS_DIR = path.join(PUBLIC_DIR, "views");
 
 // === Middlewares === 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
@@ -54,6 +57,8 @@ app.use('/api/auth', authRoutes);
 app.get('/dashboard', requireAuth, (req, res) => {
     sendView(res, 'dashboard.html');
 });
+
+app.use('/api', dashboardRoutes)
 
 // === Error Handling ===
 app.use((req, res, next) => {
