@@ -9,7 +9,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('balanceAmount').textContent = data.balance ?? 0;
         document.getElementById('spentAmount').textContent = data.spending ?? 0;
 
-        renderTransactions(data.transactionHistory, "transactionsContainer");
+        if (data.transactionHistory && data.transactionHistory.length > 0) {
+            renderTransactions(data.transactionHistory, "transactionsContainer");
+        } else {
+            document.getElementById("spendingHistoryTab").classList.add("hidden");
+            document.getElementById("notFound").classList.remove("hidden");
+        }
     } catch (err) {
         console.error("Fetch Failed : ", err);
     }
@@ -75,7 +80,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             document.getElementById("balanceAmount").textContent = receivedResponse.newBalance;
             document.getElementById("spentAmount").textContent = receivedResponse.newTotalSpent;
-        
+
+            renderTransactions(receivedResponse.newSpendingHistory, "transactionsContainer");
+            document.getElementById("spendingHistoryTab").classList.remove("hidden");
+            document.getElementById("notFound").classList.add("hidden");
+            
         } catch (err) {
             console.error("Fetch Failed : ", err);
         }
@@ -137,11 +146,11 @@ const renderTransactions = (data, listContainer) => {
         item.classList.add('grid', 'grid-cols-4', 'gap-4', 'p-2', 'items-center', 'text-center');
 
         const date = document.createElement('p');
-        date.classList.add('font-light', 'text-sm');
+        date.classList.add('font-medium');
         date.textContent = transaction.created_at;
 
         const description = document.createElement('p');
-        description.classList.add('font-light', 'text-sm');
+        description.classList.add('font-light');
         description.textContent = transaction.description;
 
         const amount = document.createElement('p');

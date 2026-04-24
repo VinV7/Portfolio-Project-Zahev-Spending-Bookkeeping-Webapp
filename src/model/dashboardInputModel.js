@@ -12,7 +12,8 @@ const updateBalance = async (userId, newBalance) => {
 const addSpending = async (userId, amountSpent, description) => {
     const addSpending = await sql`
     INSERT INTO public.user_spending (user_id, amount, description)
-    VALUES (${userId}, ${amountSpent}, ${description});`
+    VALUES (${userId}, ${amountSpent}, ${description})
+    RETURNING id, created_at, description, amount;`
 
     const UserBalance = await sql`
     INSERT INTO public.user_balance (user_id, spending)
@@ -23,7 +24,10 @@ const addSpending = async (userId, amountSpent, description) => {
         balance = user_balance.balance - EXCLUDED.spending
     RETURNING balance, spending;`
 
-    return UserBalance[0];
+    return {
+        newSpending: addSpending[0],
+        userBalance: UserBalance[0]
+    };
 }
 
 export { updateBalance, addSpending };

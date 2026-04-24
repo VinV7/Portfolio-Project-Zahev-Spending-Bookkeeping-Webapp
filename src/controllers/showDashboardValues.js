@@ -10,6 +10,8 @@ const getUserData = async (req, res, next) => {
         transactionHistory.forEach(transaction => {
             transaction.created_at = new Date(transaction.created_at).toLocaleDateString('en-CA');
         })
+
+        console.log(transactionHistory);
         
         res.json({
             balance: spendingData.balance,
@@ -38,10 +40,18 @@ const addSpendingToModel = async (req, res, next) => {
         const userData = await searchUserID(req.sessionID)
         const toDatabase = await addSpending(userData.sess.userId, req.body.amount, req.body.description)
 
+        console.log(toDatabase);
+
         return res.json({
             success: true,
-            newBalance: toDatabase.balance,
-            newTotalSpent: toDatabase.spending
+            newBalance: toDatabase.userBalance.balance,
+            newTotalSpent: toDatabase.userBalance.spending,
+            newSpendingHistory:[{
+                id: toDatabase.newSpending.id,
+                amount: toDatabase.newSpending.amount,
+                description: toDatabase.newSpending.description,
+                created_at: toDatabase.newSpending.created_at.toLocaleDateString('en-CA')
+            }]
         })
     } catch (err) {
         next(err);
