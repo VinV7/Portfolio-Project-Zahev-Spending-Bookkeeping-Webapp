@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         document.getElementById('balanceAmount').textContent = data.balance ?? 0;
         document.getElementById('spentAmount').textContent = data.spending ?? 0;
+
+        renderTransactions(data.transactionHistory, "transactionsContainer");
     } catch (err) {
         console.error("Fetch Failed : ", err);
     }
@@ -57,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             } document.getElementById("addSpendingError").textContent = "";
 
-            const res = await fetch ("http://localhost:7000/api/addSpending", {
+            const res = await fetch("http://localhost:7000/api/addSpending", {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -77,10 +79,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (err) {
             console.error("Fetch Failed : ", err);
         }
+
+
     };
 });
 
-const show = (id, btn) => {
+const showPanel = (id, btn) => {
     document.querySelectorAll('.panel').forEach(panel => panel.classList.add('hidden'))
 
     document.querySelectorAll('.sidebar-button').forEach(b => {
@@ -90,4 +94,75 @@ const show = (id, btn) => {
 
     document.getElementById('panel-' + id).classList.remove('hidden');
     btn.classList.add('bg-gray-200', 'text-gray-900');
-}
+};
+
+const showDropdown = (id) => {
+    const target = document.getElementById('dropdown-' + id);
+    const isOpen = !target.classList.contains('hidden');
+
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.add('hidden'));
+
+    if (!isOpen) {
+        target.classList.remove('hidden');
+    }
+}; 
+
+const selectMonth = async (btn, selectedMonth) => {
+    btn.preventDefault();
+
+    try {
+        const res = await fetch("http://localhost:7000/api/selectMonthlyHistory", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                month: selectedMonth
+            })
+        });
+    } catch(err) {
+        console.error(err)
+    }
+};
+
+
+
+const renderTransactions = (data, listContainer) => {
+    const container = document.getElementById(listContainer);
+
+    data.forEach(transaction => {
+        const item = document.createElement('div');
+        item.className = 'transaction-item';
+        item.classList.add('grid', 'grid-cols-4', 'gap-4', 'p-2', 'items-center', 'text-center');
+
+        const date = document.createElement('p');
+        date.classList.add('font-light', 'text-sm');
+        date.textContent = transaction.created_at;
+
+        const description = document.createElement('p');
+        description.classList.add('font-light', 'text-sm');
+        description.textContent = transaction.description;
+
+        const amount = document.createElement('p');
+        amount.classList.add('font-medium');
+        amount.textContent = transaction.amount;
+
+        const actionContainer = document.createElement('div');
+        actionContainer.classList.add('flex', 'items-center', 'justify-center');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('hover:cursor-pointer');
+        const deleteIcon = document.createElement('img');
+        deleteIcon.classList.add('h-12', 'w-auto', 'rounded-md', 'hover:bg-gray-200');
+        deleteIcon.src = '../properties/utilitiesImgs/trash.svg';
+        deleteBtn.appendChild(deleteIcon);
+        actionContainer.appendChild(deleteBtn);
+
+        item.appendChild(date);
+        item.appendChild(description);
+        item.appendChild(amount);
+        item.appendChild(actionContainer);
+
+        container.appendChild(item);
+    })
+};

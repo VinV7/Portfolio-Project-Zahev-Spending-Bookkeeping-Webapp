@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .transaction-list {
+            max-width: 600px;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+        .transaction-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        .transaction-item:hover {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="transaction-list" id="transactionList"></div>
+
+    <script>
+        const transactions = [
+            { id: 1, date: '2024-01-15', description: 'Grocery Shopping', amount: -50.00 },
+            { id: 2, date: '2024-01-16', description: 'Salary Deposit', amount: 3000.00 },
+            { id: 3, date: '2024-01-17', description: 'Electric Bill', amount: -120.00 },
+            { id: 4, date: '2026-04-23', description: 'Condom', amount: -20.00}
+        ];
+
+        function renderTransactions(data) {
+            const container = document.getElementById('transactionList');
+
+            // clearing is fine
+            container.innerHTML = '';
+
+            data.forEach(transaction => {
+                // main item
+                const item = document.createElement('div');
+                item.className = 'transaction-item';
+
+                // left side
+                const left = document.createElement('div');
+
+                const strong = document.createElement('strong');
+                strong.textContent = transaction.description;
+
+                const date = document.createElement('div');
+                date.style.color = '#666';
+                date.style.fontSize = '0.9em';
+                date.textContent = transaction.date;
+
+                left.appendChild(strong);
+                left.appendChild(date);
+
+                // right side
+                const right = document.createElement('div');
+                right.style.color = transaction.amount >= 0 ? 'green' : 'red';
+                right.textContent = `$${Math.abs(transaction.amount).toFixed(2)}`;
+
+                // assemble
+                item.appendChild(left);
+                item.appendChild(right);
+                container.appendChild(item);
+            });
+        }
+
+        renderTransactions(transactions);
+    </script>
+</body>
+</html>
+
+
+<div class="grid grid-cols-4 gap-4 p-2 items-center text-center">
+    <p class="font-light text-sm">2026-04-22</p>
+    <p class="font-light text-sm">Bought dinner for 7000, es jeruk for 5000</p>
+    <p class="font-medium">13000</p>
+    <div class="flex items-center justify-center">
+        <button class="hover:cursor-pointer">
+        <img src="../properties/utilitiesImgs/trash.svg" class="h-12 w-auto rounded-md hover:bg-gray-200">
+        </button>
+    </div>
+</div>
+
+    <div class="grid grid-cols-4 gap-4 p-2 items-center text-center">
+    <p class="font-light text-sm">2026-04-23</p>
+    <p class="font-light text-sm">Grocery shopping</p>
+    <p class="font-medium">25000</p>
+    <div class="flex items-center justify-center">
+        <button class="hover:cursor-pointer">
+        <img src="../properties/utilitiesImgs/trash.svg" class="h-12 w-auto rounded-md hover:bg-gray-200">
+        </button>
+    </div>
+</div>
