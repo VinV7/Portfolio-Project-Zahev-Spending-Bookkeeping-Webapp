@@ -14,7 +14,7 @@ const getUserSpendingData = async (userId) => {
 
 const getUserTransactionsHistory = async (userId) => {
     const transactionsHistory = await sql`
-    SELECT created_at, description, amount FROM public.user_spending where user_id = ${userId}`
+    SELECT id, created_at, description, amount FROM public.user_spending where user_id = ${userId}`
     return transactionsHistory ?? null;
 };
 

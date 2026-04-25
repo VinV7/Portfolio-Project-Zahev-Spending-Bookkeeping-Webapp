@@ -6,7 +6,8 @@ const updateBalance = async (userId, newBalance) => {
     VALUES (${userId}, ${newBalance})
     ON CONFLICT (user_id)
     DO UPDATE SET
-        balance = EXCLUDED.balance`
+        balance = EXCLUDED.balance,
+        spending = 0;`
 }
 
 const addSpending = async (userId, amountSpent, description) => {
@@ -30,4 +31,11 @@ const addSpending = async (userId, amountSpent, description) => {
     };
 }
 
-export { updateBalance, addSpending };
+const deleteRecord = async(recordId) => {
+    const deleteRecord = await sql`
+    DELETE FROM public.user_spending WHERE id = ${recordId}`
+
+    return
+}
+
+export { updateBalance, addSpending, deleteRecord};

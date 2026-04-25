@@ -6,11 +6,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const data = await res.json();
 
-        document.getElementById('balanceAmount').textContent = data.balance ?? 0;
-        document.getElementById('spentAmount').textContent = data.spending ?? 0;
+        const balAmount = document.getElementById('balanceAmount').textContent = data.balance ?? 0;
+        const spentAmount = document.getElementById('spentAmount').textContent = data.spending ?? 0;
+        const totalRecords = document.getElementById('totalRecords').textContent = data.recordLength ?? 0;
+        const transPanelSpentAmount = document.getElementById('totalSpentAmount').textContent = spentAmount;
+        const averageSpentAmount = document.getElementById('averagedSpending').textContent = data.averageSpending ?? 0;
 
-        if (data.transactionHistory && data.transactionHistory.length > 0) {
-            renderTransactions(data.transactionHistory, "transactionsContainer");
+        if (data.transactionRecords && data.transactionRecords.length > 0) {
+            renderTransactions(data.transactionRecords, "transactionsContainer");
         } else {
             document.getElementById("spendingHistoryTab").classList.add("hidden");
             document.getElementById("notFound").classList.remove("hidden");
@@ -44,6 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             document.getElementById('balanceAmount').textContent = newBalance;
+            document.getElementById('spentAmount').textContent = 0;
             document.getElementById("balanceInput").value = "";
         } catch (err) {
             console.error("Fetch Failed : ", err);
@@ -89,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error("Fetch Failed : ", err);
         }
 
-
+        
     };
 });
 
@@ -139,6 +143,7 @@ const selectMonth = async (btn, selectedMonth) => {
 
 const renderTransactions = (data, listContainer) => {
     const container = document.getElementById(listContainer);
+    console.log(data);
 
     data.forEach(transaction => {
         const item = document.createElement('div');
@@ -165,6 +170,17 @@ const renderTransactions = (data, listContainer) => {
         deleteIcon.classList.add('h-12', 'w-auto', 'rounded-md', 'hover:bg-gray-200');
         deleteIcon.src = '../properties/utilitiesImgs/trash.svg';
         deleteBtn.appendChild(deleteIcon);
+
+        deleteBtn.addEventListener('click', async  () => {
+            const res = await deleteSpendingRecord(transaction.id);
+
+            if (res.success) {
+                item.remove();
+            } else {
+                console.error("Failed to delete record");
+            }
+        });
+
         actionContainer.appendChild(deleteBtn);
 
         item.appendChild(date);
@@ -175,3 +191,29 @@ const renderTransactions = (data, listContainer) => {
         container.appendChild(item);
     })
 };
+
+const deleteSpendingRecord = async (recordId) => {
+    try { 
+        const res = await fetch (`http://localhost:7000/api/deleteSpendingRecord/`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                "Content-Type" : "application/json",
+            },
+            body: JSON.stringify({
+                id: recordId,
+            })
+        });
+
+        const response = await res.json();
+
+        if (response.success) {
+            return {success: true};
+        } else {
+            return {success: false};
+        }
+
+    } catch (err) {
+        console.error(err);
+    }
+}
