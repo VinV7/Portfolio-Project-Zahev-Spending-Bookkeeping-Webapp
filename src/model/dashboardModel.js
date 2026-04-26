@@ -18,4 +18,11 @@ const getUserTransactionsHistory = async (userId) => {
     return transactionsHistory ?? null;
 };
 
-export { getUserSpendingData, searchUserID, getUserTransactionsHistory};
+const getUserSpecificMonthlyRecords = async (userId, month) => {
+    const monthlyRecords = await sql`
+    SELECT id, created_at, description, amount FROM public.user_spending 
+    WHERE user_id = ${userId} AND EXTRACT(MONTH FROM created_at) = ${month}`
+    return monthlyRecords ?? null;
+}
+
+export { getUserSpendingData, searchUserID, getUserTransactionsHistory, getUserSpecificMonthlyRecords};

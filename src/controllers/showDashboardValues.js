@@ -1,4 +1,4 @@
-import { getUserSpendingData, searchUserID, getUserTransactionsHistory} from '../model/dashboardModel.js';
+import { getUserSpendingData, searchUserID, getUserTransactionsHistory, getUserSpecificMonthlyRecords } from '../model/dashboardModel.js';
 import { updateBalance, addSpending, deleteRecord } from '../model/dashboardInputModel.js';
 
 const getUserData = async (req, res, next) => {
@@ -76,6 +76,24 @@ const deleteSpendingRecord = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-}
+};
 
-export { getUserData, updateBal, addSpendingToModel, deleteSpendingRecord };
+const showSpecificMonthlyData = async (req, res, next) => {
+    try {
+        const month = req.body.month;
+        const userData = await searchUserID(req.sessionID);
+        const monthlyRecords = await getUserSpecificMonthlyRecords(userData.sess.userId, month);
+
+        monthlyRecords.forEach(transaction => {
+            transaction.created_at = new Date(transaction.created_at).toLocaleDateString('en-CA');
+        });
+
+        return res.json({
+            monthlyRecords: monthlyRecords
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export { getUserData, updateBal, addSpendingToModel, deleteSpendingRecord, showSpecificMonthlyData };

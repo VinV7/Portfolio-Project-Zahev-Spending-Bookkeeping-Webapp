@@ -120,12 +120,10 @@ const showDropdown = (id) => {
     }
 }; 
 
-const selectMonth = async (btn, selectedMonth) => {
-    btn.preventDefault();
-
+const selectMonth = async (selectedMonth) => {
     try {
         const res = await fetch("http://localhost:7000/api/selectMonthlyHistory", {
-            method: "GET",
+            method: "POST",
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
@@ -134,6 +132,20 @@ const selectMonth = async (btn, selectedMonth) => {
                 month: selectedMonth
             })
         });
+        
+        data = await res.json();
+        console.log(data.monthlyRecords);
+        
+        if (data.monthlyRecords && data.monthlyRecords.length > 0) {
+            const container = document.getElementById("transactionsContainer");
+            container.innerHTML = '';
+            renderTransactions(data.monthlyRecords, "transactionsContainer");
+            document.getElementById("spendingHistoryTab").classList.remove("hidden");
+            document.getElementById("notFound").classList.add("hidden");
+        } else {
+            document.getElementById("spendingHistoryTab").classList.add("hidden");
+            document.getElementById("notFound").classList.remove("hidden");
+        }
     } catch(err) {
         console.error(err)
     }
@@ -143,7 +155,6 @@ const selectMonth = async (btn, selectedMonth) => {
 
 const renderTransactions = (data, listContainer) => {
     const container = document.getElementById(listContainer);
-    console.log(data);
 
     data.forEach(transaction => {
         const item = document.createElement('div');
