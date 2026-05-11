@@ -2,7 +2,7 @@
 import express from 'express';
 
 // === Controllers Import ===
-import { createAccount, loginAuthentication } from '../controllers/auth.js';
+import { createAccount, loginAuthentication, logout } from '../controllers/auth.js';
 
 const router = express.Router();
 
@@ -10,5 +10,7 @@ const router = express.Router();
 router.post('/create', createAccount);
 
 router.post('/login', loginAuthentication);
+
+router.post('/logout', logout);
 
 export default router;

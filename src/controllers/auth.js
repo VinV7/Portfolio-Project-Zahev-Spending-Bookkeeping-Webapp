@@ -56,4 +56,22 @@ const loginAuthentication = async (req, res, next) => {
     }
 }
 
-export { createAccount, loginAuthentication}; 
+const logout = async (req, res, next) => {
+    try {
+        req.session.destroy((err) => {
+            if (err) {
+                next(err)
+            };
+
+            res.clearCookie("connect.sid");
+            return res.json({
+                success: true,
+                redirect: "/",
+            });
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+export { createAccount, loginAuthentication, logout }; 
