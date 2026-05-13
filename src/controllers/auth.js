@@ -57,7 +57,6 @@ const loginAuthentication = async (req, res, next) => {
 }
 
 const logout = async (req, res, next) => {
-    console.log("Logout Tried")
     try {
         req.session.destroy((err) => {
             if (err) {

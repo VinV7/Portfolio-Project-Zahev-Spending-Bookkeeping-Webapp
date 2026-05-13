@@ -98,8 +98,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     logoutBtn.onclick = async (e) => {
         e.preventDefault();
-        
-        console.log("clicked");
         try {
             const res = await fetch('http://localhost:7000/api/auth/logout', {
                 method: "POST",
