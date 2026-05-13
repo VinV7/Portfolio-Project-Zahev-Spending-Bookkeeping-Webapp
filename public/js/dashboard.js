@@ -91,9 +91,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             
         } catch (err) {
             console.error("Fetch Failed : ", err);
-        }
+        };
+    }
 
+    const logoutBtn = document.getElementById('logoutBtn')
+    
+    logoutBtn.onclick = async (e) => {
+        e.preventDefault();
         
+        console.log("clicked");
+        try {
+            const res = await fetch('http://localhost:7000/api/auth/logout', {
+                method: "POST",
+                credentials: "include"
+            })
+
+            data = await res.json();
+
+            if (data.success) {
+                window.location.href = data.redirect;
+            } else {
+                throw new Error("Logout Request Failed"); 
+            }
+        } catch (err) {
+            console.err(err)
+        }
     };
 });
 

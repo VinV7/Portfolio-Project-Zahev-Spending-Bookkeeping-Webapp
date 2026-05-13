@@ -20,6 +20,9 @@ createAccountForm.onsubmit = async (e) => {
         if (data.success) {
         window.location.href = data.redirect;
         };
+        if (!data.success) {
+            document.getElementById("loginError").textContent = data.message || "An error occurred. Please try again.";
+        }
     } catch (error) {
         console.error('Error creating account:', error);
     }

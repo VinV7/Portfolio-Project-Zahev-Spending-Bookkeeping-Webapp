@@ -9,6 +9,7 @@ import session from './src/config/session.js';
 import checkAuthenticated from './src/middleware/session/checkSession.js';
 import requireAuth from './src/middleware/session/sessionAuth.js';
 import cookieParser from 'cookie-parser';
+import errorHandler from './src/middleware/error/errorHandler.js';
 
 // === Routes Imports ===
 import authRoutes from './src/routes/auth.js';
@@ -65,14 +66,7 @@ app.use((req, res, next) => {
     res.status(404).sendFile(path.join(VIEWS_DIR, 'notFound.html'));
 });
 
-app.use((err, req, res, next) => {
-  console.error(err);
-
-  res.status(err.statusCode || 500).json({
-    success: false,
-    message: err.message || "Internal Server Error"
-  });
-});
+app.use(errorHandler);
 
 // === Server Start === 
 app.listen(PORT, () => {

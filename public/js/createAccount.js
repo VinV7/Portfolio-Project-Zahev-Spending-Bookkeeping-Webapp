@@ -3,6 +3,8 @@ const createAccountForm = document.getElementById("createAccountForm");
 createAccountForm.onsubmit = async (e) => {
     e.preventDefault();
 
+    if (!createAccountForm.reportValidity()) return
+
     const email = document.getElementById("email").value;
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
@@ -17,11 +19,15 @@ createAccountForm.onsubmit = async (e) => {
         });
 
         const data = await res.json();
+        console.log(data);
 
         if (data.success) {
-        window.location.href = data.redirect;
-        };
-    } catch (error) {
-        console.error('Error creating account:', error);
+            window.location.href = data.redirect;
+        }; 
+        if (!data.success) {
+            document.getElementById("signUpError").textContent = data.message || "An error occurred. Please try again.";
+        }
+    } catch (err) {
+        console.error('Error creating account:', err);
     }
 };
